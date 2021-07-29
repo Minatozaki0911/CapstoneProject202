@@ -3,18 +3,23 @@ import cv2
 import numpy as np
 from keras.models import load_model
 import time
+from urllib import request
+import time
 
 prediction = ''
 score = 0
 bgModel = None
 
-gesture_names = {0: 'E',
-                 1: 'L',
-                 2: 'F',
-                 3: 'V',
-                 4: 'B'}
+URL='http://192.168.1.4:8080/shot.jpg'
 
-model = load_model('models/bruh.h5')
+gesture_names = {0: 'Nam Tay',
+                 1: 'Chu L',
+                 2: 'OK',
+                 3: 'Chu V',
+                 4: 'Ban tay'}
+
+model = load_model('./Do_an_HK202_Model')
+print("model loaded")
 
 def predict_rgb_image_vgg(image):
     image = np.array(image, dtype='float32')
@@ -46,12 +51,10 @@ predThreshold= 95
 
 isBgCaptured = 0
 
-camera = cv2.VideoCapture(0)
-camera.set(10,200)
-camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.01)
-
-while camera.isOpened():
-    ret, frame = camera.read()
+while True: 
+    stream = np.array(bytearray(request.urlopen(URL).read()), dtype=np.uint8)
+    frame = cv2.imdecode(stream, -1)
+    #frame = cv2.resize(frame, (700,400))
     frame = cv2.bilateralFilter(frame, 5, 50, 100)
     frame = cv2.flip(frame, 1)
 
@@ -87,8 +90,9 @@ while camera.isOpened():
     thresh = None
 
     key = cv2.waitKey(1)
-    if key == ord('q'):  # Bam q de thoat
+    if key == ord('q'):
         break
+
     elif key == ord('b'):
         bgModel = cv2.createBackgroundSubtractorMOG2(0, bgSubThreshold)
 
@@ -109,4 +113,3 @@ while camera.isOpened():
     cv2.imshow('From camera', cv2.resize(frame, dsize=None, fx=0.5, fy=0.5))
 
 cv2.destroyAllWindows()
-camera.release()
