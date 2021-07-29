@@ -59,7 +59,7 @@ while True:
     frame = cv2.flip(frame, 1)
 
     cv2.rectangle(frame, (int(cap_region_x_begin * frame.shape[1]), 0),
-                  (frame.shape[1], int(cap_region_y_end * frame.shape[0])), (255, 0, 0), 2)
+                  (frame.shape[1], int(cap_region_y_end * frame.shape[0])), (0, 255, 0), 2)
 
     if isBgCaptured == 1:
         img = remove_background(frame)
@@ -86,7 +86,7 @@ while True:
                 print(score,prediction)
                 if (score>=predThreshold):
                     cv2.putText(frame, "Sign:" + prediction, (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 3,
-                                (0, 0, 255), 10, lineType=cv2.LINE_AA)
+                                (125, 255, 0), 5, lineType=cv2.LINE_AA)
     thresh = None
 
     key = cv2.waitKey(1)
@@ -98,7 +98,7 @@ while True:
 
         isBgCaptured = 1
         cv2.putText(frame, "Background captured", (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 3,
-                    (0, 0, 255), 10, lineType=cv2.LINE_AA)
+                    (212, 0, 212), 5, lineType=cv2.LINE_AA)
         time.sleep(2)
         print('Background Reference')
 
@@ -106,7 +106,7 @@ while True:
         bgModel = None
         isBgCaptured = 0
         cv2.putText(frame, "Background reset", (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 3,
-                    (0, 0, 255),10,lineType=cv2.LINE_AA)
+                    (50, 0, 200), 5,lineType=cv2.LINE_AA)
         print('Background reference reset')
         time.sleep(1)
 
